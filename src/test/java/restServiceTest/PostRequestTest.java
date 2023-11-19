@@ -1,20 +1,31 @@
 package restServiceTest;
 
 import io.restassured.RestAssured;
+import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
-import io.restassured.matcher.ResponseAwareMatcher;
-import io.restassured.response.Response;
-import org.hamcrest.Matcher;
+import io.restassured.specification.RequestSpecification;
 import org.testng.annotations.Test;
 
 import java.util.HashMap;
 
 import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class PostRequestTest {
 
-    private final String URI_REQRES = "https://reqres.in/api/users"; //тестовый стенд
-    @Test (description = "Проверка статуса 201 (created)")
+    //uri тестового стенда
+    private static String BASE_URI = "https://reqres.in";
+    private static String BASE_PATH = "/api/users";
+
+    //Задание спецификации настроек запроса. Тоже самое можно настроить и для ответа
+    private static RequestSpecification REQ_SPEC =
+            new RequestSpecBuilder()
+                    .setBaseUri(BASE_URI)
+                    .setBasePath(BASE_PATH)
+                    .setContentType(ContentType.JSON)
+                    .build();
+
+    @Test (description = "Проверка статуса 201 (created). Просто выполняется тест с проверкой без записи в результов в переменную класса")
     public void postRequestTest() {
         HashMap<String, Object> data = new HashMap<>();
         data.put("name","John Week");
@@ -22,7 +33,8 @@ public class PostRequestTest {
 
         RestAssured
                 .given()
-                    .baseUri(URI_REQRES)
+                    .baseUri(BASE_URI)
+                    .basePath(BASE_PATH)
                     .contentType("application/json")
                     .body(data)
                     .log().all()
@@ -34,5 +46,46 @@ public class PostRequestTest {
                     .log().all()
                     .statusCode(201)
                     .assertThat().contentType("application/json");
+    }
+
+    @Test (description = "Создание нового пользователя (рефактор теста)")
+    public void postNewCreateUser() {
+        CreateUserRequest request = new CreateUserRequest();
+        request.setName("Alibaba");
+        request.setJob("Matrica");
+
+        CreateUserResponce responce = given()
+                .baseUri(BASE_URI)
+                .basePath(BASE_PATH)
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when().post()
+                //Преобразовываем json в java-объект c помощью указанного класса
+                .then()
+                .log().all()
+                .extract().as(CreateUserResponce.class);
+
+        assertThat(responce)
+                .isNotNull()
+                .extracting(CreateUserResponce::getName)
+                .isEqualTo(request.getName());
+    }
+
+    @Test(description = "Использование спеки запроса для отправки запроса")
+    public void sendPostSpec() {
+        CreateUserRequest rq = new CreateUserRequest();
+        rq.setName("Batman");
+        rq.setJob("Gotham");
+
+        CreateUserResponce responce = given()
+                .spec(REQ_SPEC)
+                .body(rq)
+                .when().post()
+                .then().extract().as(CreateUserResponce.class);
+        assertThat(responce)
+                .isNotNull()
+                .extracting(CreateUserResponce::getJob)
+                .isEqualTo(rq.getJob());
+
     }
 }
