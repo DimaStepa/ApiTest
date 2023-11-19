@@ -1,35 +1,20 @@
-package restServiceTest;
+package pojo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import restServiceTest.CustomDeserializer;
 
 import java.time.LocalDateTime;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CreateUserResponce {
+public class CreateUserResponce extends UserRequest{
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getJob() {
-        return job;
-    }
-
-    public void setJob(String job) {
-        this.job = job;
     }
 
     public LocalDateTime getCreateAt() {
@@ -41,8 +26,6 @@ public class CreateUserResponce {
     }
 
     private int id;
-    private String name;
-    private String job;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
     @JsonDeserialize(using = CustomDeserializer.class)
     private LocalDateTime createAt;

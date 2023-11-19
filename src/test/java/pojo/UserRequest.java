@@ -1,6 +1,6 @@
-package restServiceTest;
+package pojo;
 
-public class CreateUserRequest {
+public class UserRequest {
 
     public String name;
 

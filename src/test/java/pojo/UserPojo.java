@@ -1,4 +1,4 @@
-package restServiceTest;
+package pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

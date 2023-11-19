@@ -2,18 +2,13 @@ package restServiceTest;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import io.restassured.matcher.ResponseAwareMatcher;
 import io.restassured.response.Response;
-import org.assertj.core.api.AbstractAssert;
-import org.assertj.core.api.AbstractIterableAssert;
 import org.testng.annotations.Test;
+import pojo.UserPojo;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static io.restassured.RestAssured.*;
-import static org.assertj.core.api.FactoryBasedNavigableListAssert.*;
 import static org.hamcrest.Matchers.equalTo;
 import static org.testng.AssertJUnit.assertEquals;
 

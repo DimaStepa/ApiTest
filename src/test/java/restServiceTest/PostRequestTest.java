@@ -5,6 +5,8 @@ import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import org.testng.annotations.Test;
+import pojo.UserRequest;
+import pojo.CreateUserResponce;
 
 import java.util.HashMap;
 
@@ -50,7 +52,7 @@ public class PostRequestTest {
 
     @Test (description = "Создание нового пользователя (рефактор теста)")
     public void postNewCreateUser() {
-        CreateUserRequest request = new CreateUserRequest();
+        UserRequest request = new UserRequest();
         request.setName("Alibaba");
         request.setJob("Matrica");
 
@@ -73,7 +75,7 @@ public class PostRequestTest {
 
     @Test(description = "Использование спеки запроса для отправки запроса")
     public void sendPostSpec() {
-        CreateUserRequest rq = new CreateUserRequest();
+        UserRequest rq = new UserRequest();
         rq.setName("Batman");
         rq.setJob("Gotham");
 
